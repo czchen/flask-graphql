@@ -1,4 +1,5 @@
 import json
+import logging
 
 import six
 from flask import Response, request
@@ -30,6 +31,7 @@ class GraphQLView(View):
     pretty = False
     graphiql = False
     graphiql_version = None
+    logger = logging.getLogger()
 
     methods = ['GET', 'POST', 'PUT', 'DELETE']
 
@@ -183,6 +185,7 @@ class GraphQLView(View):
                 executor=self.executor
             )
         except Exception as e:
+            self.logger.exception('Exception happens when executing GraphQL')
             return ExecutionResult(errors=[e], invalid=True)
 
     @classmethod
